@@ -58,6 +58,7 @@ RUN python create_onnx.py \
 #######################################
 ### Convert onnx to tensorRT
 RUN mkdir /workspace/trt
+RUN nvidia-smi
 RUN python build_engine.py \
     --onnx /workspace/onnx/model.onnx \
     --engine /workspace/trt/engine.trt \
@@ -82,4 +83,5 @@ RUN python infer.py \
 ## Results available at /workspace/test_output
 
 #######################################
+WORKDIR /workspace 
 CMD /bin/bash
