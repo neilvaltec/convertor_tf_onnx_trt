@@ -8,7 +8,8 @@ COPY . .
 ### Re-export tensorflow model. # REF: https://github.com/NVIDIA/TensorRT/blob/ba459b420e6f7bbebcdbe805f6ed1444a7e51f04/samples/python/tensorflow_object_detection_api/README.md?plain=1#L86C23-L86C23
 WORKDIR /workspace
 RUN git clone https://github.com/tensorflow/models.git
-# commit 5bd7c93
+# checkout to commit 8d11677bb56dd6776ff14115aa7361bd04bbd0d8
+RUN git checkout 8d11677bb56dd6776ff14115aa7361bd04bbd0d8
 WORKDIR /workspace/models/research
 RUN apt install -y protobuf-compiler
 RUN protoc object_detection/protos/*.proto --python_out=.
@@ -38,7 +39,7 @@ RUN python exporter_main_v2.py \
 ### Convert tf to onnx
 WORKDIR /workspace 
 RUN git clone https://github.com/NVIDIA/TensorRT.git
-# tag release/8.6
+# checkout to release/8.6
 RUN git checkout release/8.6
 WORKDIR /workspace/TensorRT/samples/python/tensorflow_object_detection_api
 RUN pip install -r requirements.txt ?????????????????
