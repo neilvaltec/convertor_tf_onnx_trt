@@ -12,3 +12,10 @@ tensorflow -> onnx -> tensorRT
 ```bash
 docker run -it --rm --gpus all neilvaltec/convertor_tf_onnx_trt:0.0.1 bash
 ```
+## Environments
+- Cloud provider
+    - AWS
+- Image
+    - amazon/Deep Learning AMI GPU CUDA 11.2.1 (Ubuntu 20.04) 20220607
+- Instance type
+    - g4dn.2xlarge (NVIDIA T4 GPU * 1)
