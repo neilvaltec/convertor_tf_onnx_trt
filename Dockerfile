@@ -17,8 +17,8 @@ RUN python -m pip install --use-feature=2020-resolver .
 RUN pip install protobuf==3.20.3
 
 ## script to test the installation 
-# python object_detection/builders/model_builder_tf2_test.py
-# pip show object-detection
+RUN python object_detection/builders/model_builder_tf2_test.py
+RUN pip show object-detection
 
 WORKDIR /workspace
 RUN mkdir re_export_tf
@@ -65,7 +65,9 @@ RUN trtexec \
         --loadEngine=/workspace/trt/engine.trt \
         --useCudaGraph --noDataTransfers \
         --iterations=100 --avgRuns=100
-
+        
+RUN pip install Pillow==9.5.0
+RUN mkdir /workspace/test_output
 RUN python infer.py \
         --engine /workspace/trt/engine.trt \
         --input /workspace/images/resized/300x300_1.jpg \
