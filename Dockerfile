@@ -3,11 +3,13 @@ FROM nvcr.io/nvidia/tensorflow:21.10-tf2-py3
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt update 
 
+WORKDIR /workspace
 COPY . .
+
 #######################################
 ### Re-export tensorflow model. # REF: https://github.com/NVIDIA/TensorRT/blob/ba459b420e6f7bbebcdbe805f6ed1444a7e51f04/samples/python/tensorflow_object_detection_api/README.md?plain=1#L86C23-L86C23
-WORKDIR /workspace
 RUN git clone https://github.com/tensorflow/models.git
+WORKDIR /workspace/models
 # checkout to commit 8d11677bb56dd6776ff14115aa7361bd04bbd0d8
 RUN git checkout 8d11677bb56dd6776ff14115aa7361bd04bbd0d8
 WORKDIR /workspace/models/research
@@ -40,9 +42,10 @@ RUN python exporter_main_v2.py \
 WORKDIR /workspace 
 RUN git clone https://github.com/NVIDIA/TensorRT.git
 # checkout to release/8.6
+WORKDIR /workspace/TensorRT
 RUN git checkout release/8.6
 WORKDIR /workspace/TensorRT/samples/python/tensorflow_object_detection_api
-RUN pip install -r requirements.txt ?????????????????
+RUN pip install -r requirements.txt
 RUN pip install nvidia-pyindex
 RUN pip install onnx-graphsurgeon
 RUN pip install numpy==1.23.0
@@ -75,3 +78,8 @@ RUN python infer.py \
         --output /workspace/test_output \
         --preprocessor fixed_shape_resizer \
         --labels /workspace/TensorRT/samples/python/tensorflow_object_detection_api/labels_coco.txt
+
+## Results available at /workspace/test_output
+
+#######################################
+CMD /bin/bash
