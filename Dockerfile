@@ -3,6 +3,7 @@ FROM nvcr.io/nvidia/tensorflow:21.10-tf2-py3
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt update 
 
+COPY . .
 #######################################
 ### Re-export tensorflow model. # REF: https://github.com/NVIDIA/TensorRT/blob/ba459b420e6f7bbebcdbe805f6ed1444a7e51f04/samples/python/tensorflow_object_detection_api/README.md?plain=1#L86C23-L86C23
 WORKDIR /workspace
@@ -38,6 +39,7 @@ RUN python exporter_main_v2.py \
 WORKDIR /workspace 
 RUN git clone https://github.com/NVIDIA/TensorRT.git
 # tag release/8.6
+RUN git checkout release/8.6
 WORKDIR /workspace/TensorRT/samples/python/tensorflow_object_detection_api
 RUN pip install -r requirements.txt ?????????????????
 RUN pip install nvidia-pyindex
@@ -66,7 +68,7 @@ RUN trtexec \
 
 RUN python infer.py \
         --engine /workspace/trt/engine.trt \
-        --input /path/to/images \
-        --output /path/to/output \
+        --input /workspace/images/resized/300x300_1.jpg \
+        --output /workspace/test_output \
         --preprocessor fixed_shape_resizer \
-        --labels /path/to/labels_coco.txt
+        --labels /workspace/TensorRT/samples/python/tensorflow_object_detection_api/labels_coco.txt
