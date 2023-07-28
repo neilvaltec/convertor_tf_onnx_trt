@@ -82,6 +82,33 @@ RUN python infer.py \
 
 ## Results available at /workspace/test_output
 
+
+#######################################
+## install gstreamer compiled opencv
+RUN pip uninstall -y opencv-python opencv-python-headless
+
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get install -y libsm6 libxext6 libxrender-dev python3-tk
+RUN apt update && apt install -y pkg-config \
+  ffmpeg \
+  libavformat-dev \
+  libavcodec-dev \
+  libswscale-dev \
+  cmake \
+  libgstreamer1.0-dev \
+  libgstreamer-plugins-base1.0-dev \
+  gstreamer1.0-plugins-ugly \
+  gstreamer1.0-rtsp \
+  python3-dev \
+  python3-numpy
+
+RUN git clone --depth=1 -b 4.5.4 https://github.com/opencv/opencv
+RUN cd opencv && \
+    mkdir build && cd build && \
+    cmake -D CMAKE_INSTALL_PREFIX=/usr -D WITH_GSTREAMER=ON .. && \
+    make -j$(nproc)  && \
+    make install 
+
 #######################################
 WORKDIR /workspace 
 CMD /bin/bash
